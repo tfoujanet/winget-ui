@@ -8,6 +8,7 @@ import {
 import mainEvents from "@/_main/index";
 import windowEvents from "@/_main/windowEvents";
 const isDevelopment = process.env.NODE_ENV !== 'production'
+const nodeIntegration: boolean = !!process.env.ELECTRON_NODE_INTEGRATION;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -22,7 +23,7 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 800, height: 600, useContentSize: true, frame: false, webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: nodeIntegration
     }
   });
 
