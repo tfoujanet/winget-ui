@@ -36,6 +36,7 @@ jobs:
 
     - name: Package artifacts
       run: |
+        pwd
         mkdir artifact-setup
         mv dist_electron/winget-ui\ Setup\ *.exe artifact-setup/
 
