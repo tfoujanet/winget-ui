@@ -31,8 +31,6 @@ jobs:
 
       - name: Check package version
         uses: technote-space/package-version-check-action@v1
-        with:
-          COMMIT_DISABLED: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v1.4.2
