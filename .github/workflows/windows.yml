@@ -28,9 +28,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v2
-
+      
       - name: Check package version
-        uses: technote-space/package-version-check-action@v1
+        uses: geritol/match-tag-to-package-version@0.0.1
 
       - name: Setup Node.js
         uses: actions/setup-node@v1.4.2
@@ -41,12 +41,7 @@ jobs:
           yarn
 
       - name: Build
-        run: yarn electron:build
-
-      - name: Prepare artifacts
-        run: |
-          mkdir artifact-setup
-          mv dist_electron/winget-ui\ Setup\ *.exe artifact-setup/
+        run: yarn electron:build -- -p always
 
       - name: Create Release
         id: create_release
