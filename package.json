@@ -1,7 +1,7 @@
 {
   "name": "winget-ui",
   "description": "An electron app to manage windows package through winget",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
