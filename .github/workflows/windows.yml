@@ -29,8 +29,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-      - name: Check package version
-        uses: geritol/match-tag-to-package-version@0.0.1
+      - name: Package Version Check Action
+        uses: technote-space/package-version-check-action@v1.5.2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_DISABLED: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v1.4.2
