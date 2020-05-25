@@ -34,6 +34,10 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMIT_DISABLED: 1
+          
+      - name: Read version from Package.json
+        uses: culshaw/read-package-node-version-actions@v1
+        id: package_version
 
       - name: Setup Node.js
         uses: actions/setup-node@v1.4.2
@@ -44,7 +48,9 @@ jobs:
           yarn
 
       - name: Build
-        run: yarn electron:build
+        run: |
+          yarn electron:build
+          ls -l dist_electron/
 
       - name: Create Release
         id: create_release
@@ -64,6 +70,6 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:	
           upload_url: ${{ steps.create_release.outputs.upload_url }}	
-          asset_path: ./dist_electron/winget-ui\ Setup\ *.exe	
+          asset_path: dist_electron/winget-ui-Setup-${{ steps.package_version.outputs.version }}.exe	
           asset_name: winget-ui-win-setup-${{ github.ref }}.exe	
           asset_content_type: application/octet-stream
