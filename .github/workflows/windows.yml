@@ -49,7 +49,7 @@ jobs:
 
       - name: Build
         run: |
-          yarn electron:build
+          yarn electron:build -- --win
           ls -l dist_electron/
 
       - name: Create Release
