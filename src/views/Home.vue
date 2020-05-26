@@ -16,22 +16,20 @@
         @click="selectPackage(pkg.Id)"
       />
     </v-row>
-    <package-details v-model="showDetails" @input="unselectPackageOnClose($event)" />
   </v-container>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import PackagePreview from "@/components/packages/Preview";
 import PackageResume from "@/components/packages/Resume";
-import PackageDetails from "@/components/packages/ModalDetails";
 import { IsInstalledSelector } from "../store/types";
 
 const NOMBRE_PACKAGE_DEFAUT = 10;
 
 export default {
   name: "Home",
-  components: { PackagePreview, PackageResume, PackageDetails },
+  components: { PackagePreview, PackageResume },
   computed: {
     ...mapGetters({
       packages: 'filteredPackage'
@@ -44,19 +42,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["selectionnerPackage"]),
     selectPackage(id) {
-      this.selectionnerPackage(id);
-      this.showDetails = true;
-    },
-    unselectPackageOnClose(isOpen) {
-      if (!isOpen) {
-        this.selectionnerPackage();
-      }
+      this.$router.push(`/package/${id}`);
     }
-  },
-  data: () => ({
-    showDetails: false
-  })
+  }
 };
 </script>

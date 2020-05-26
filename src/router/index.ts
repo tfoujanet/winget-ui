@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
 import NoWinget from "../views/NoWinget.vue";
+import PackageDetails from "../views/PackageDetails.vue";
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,12 @@ const routes: Array<RouteConfig> = [
     path: "/no-winget",
     name: "NoWinget",
     component: NoWinget
+  },
+  {
+    path: "/package/:id",
+    name: "Package",
+    props: true,
+    component: PackageDetails
   },
   {
     path: '/about',
