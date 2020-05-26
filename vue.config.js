@@ -5,6 +5,7 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
+      nodeIntegration: true,
       builderOptions: {
         win: {
           artifactName: "${productName}-Setup-${version}.${ext}"

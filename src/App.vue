@@ -70,7 +70,7 @@ export default Vue.extend({
 
   computed: {
     ...mapGetters({
-      packages: 'filteredPackage'
+      packages: "filteredPackage"
     }),
     ...mapState({
       fullListPackages: "packages"
@@ -89,7 +89,9 @@ export default Vue.extend({
     this.$store.dispatch("initialiser");
     this.$store.subscribe(mutation => {
       if (mutation.type === WINGET_NON_INSTALLED) {
-        this.$router.replace("/no-winget");
+        if (this.$route.path !== "/no-winget") {
+          this.$router.replace("/no-winget");
+        }
       }
     });
   },
@@ -105,7 +107,7 @@ export default Vue.extend({
       ipcRenderer.send("toggleMaximize");
     },
     close() {
-      ipcRenderer.send('close');
+      ipcRenderer.send("close");
     }
   }
 });
