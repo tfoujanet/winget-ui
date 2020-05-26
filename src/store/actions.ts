@@ -4,17 +4,28 @@ import { getVersion, listerPackages, showPackage, installPackage } from '../serv
 import { getAppVersion } from '@/services/context';
 
 const actions: ActionTree<State, State> = {
-    initialiser({ dispatch, commit }) {
+    initialiser({ dispatch }) {
         dispatch("loadAppContext");
+        return dispatch("checkWingetVersion")
+            .catch(console.warn);
+    },
+    checkWingetVersion({ dispatch, commit }) {
         return dispatch("chargerVersion")
-            .then(() => {
-                dispatch("listerPackages");
+            .catch(() => {
+                commit(WINGET_NON_INSTALLED);
+                throw "";
             })
-            .catch(() => commit(WINGET_NON_INSTALLED));
+            .then(version => {
+                dispatch("listerPackages");
+                return version;
+            });
     },
     chargerVersion({ commit }) {
         return getVersion()
-            .then((version: string) => commit(VERSION_CHARGEE, version));
+            .then((version: string) => {
+                commit(VERSION_CHARGEE, version);
+                return version;
+            });
     },
     listerPackages({ commit }) {
         return listerPackages().then(liste => commit(PACKAGES_LISTES, liste));
