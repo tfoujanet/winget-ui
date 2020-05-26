@@ -71,5 +71,5 @@ jobs:
         with:	
           upload_url: ${{ steps.create_release.outputs.upload_url }}	
           asset_path: dist_electron/winget-ui-Setup-${{ steps.package_version.outputs.version }}.exe	
-          asset_name: winget-ui-win-setup-${{ github.ref }}.exe	
+          asset_name: winget-ui-win-setup-v${{ steps.package_version.outputs.version }}.exe	
           asset_content_type: application/octet-stream
