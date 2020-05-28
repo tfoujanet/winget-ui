@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <v-overlay v-if="!selectionne" :value="true">
+    <v-overlay v-if="!selectionne" :value="true" absolute>
       <v-progress-circular indeterminate />
     </v-overlay>
-    <v-card v-else>
+    <v-card outlined v-else>
       <v-card-title>
         <v-btn icon color="primary" @click="goToList">
           <v-icon>arrow_back</v-icon>
@@ -13,27 +13,69 @@
       <v-card-text>
         <v-row>
           <v-col>
-            <v-text-field readonly label="Id" :value="selectionne.Id" />
-            <v-text-field readonly label="Version" :value="selectionne.Version" />
-            <v-text-field readonly label="Auteur" :value="selectionne.Author" />
-            <v-text-field readonly label="Publisher" :value="selectionne.Publisher" />
-            <v-text-field readonly label="Moniker" :value="selectionne.AppMoniker" />
-            <v-text-field
-              readonly
-              label="Home"
-              :value="selectionne.Homepage"
-              append-icon="launch"
-              @click:append="open(selectionne.Homepage)"
-            />
-            <v-textarea readonly label="Description" :value="selectionne.Description" />
-            <v-text-field readonly label="License" :value="selectionne.License" />
-            <v-text-field
-              readonly
-              label="License Url"
-              :value="selectionne.LicenseUrl"
-              append-icon="launch"
-              @click:append="open(selectionne.LicenseUrl)"
-            />
+            <v-card>
+              <v-card-text>
+                <package-field-text label="Id" :value="selectionne.Id" />
+                <package-field-text label="Auteur" :value="selectionne.Author" />
+                <package-field-text label="Publisher" :value="selectionne.Publisher" />
+                <package-field-text label="Name" :value="selectionne.Name" />
+                <package-field-text label="Moniker" :value="selectionne.AppMoniker" />
+                <package-field-text label="Version" :value="selectionne.Version" />
+                <package-field-text label="Channel" :value="selectionne.Channel" />
+                <package-field-text label="License" :value="selectionne.License" />
+                <package-field-link
+                  label="License Url"
+                  :value="selectionne.LicenseUrl"
+                  @open="open($event)"
+                />
+                <package-field-text label="Min OS Version" :value="selectionne.MinOSVersion" />
+                <v-textarea readonly label="Description" :value="selectionne.Description" />
+                <package-field-link
+                  label="Home"
+                  :value="selectionne.Homepage"
+                  @open="open($event)"
+                />
+                <package-field-text label="Tags" :value="selectionne.Tags" />
+                <package-field-text
+                  label="Extensions de fichiers"
+                  :value="selectionne.FileExtensions"
+                />
+                <package-field-text label="Protocoles" :value="selectionne.Protocols" />
+                <package-field-text label="Commandes" :value="selectionne.Commands" />
+                <package-field-text label="InstallerType" :value="selectionne.InstallerType" />
+                <package-field-text label="Custom" :value="selectionne.Custom" />
+                <package-field-text label="Silent" :value="selectionne.Silent" />
+                <package-field-text
+                  label="SilentWithProgress"
+                  :value="selectionne.SilentWithProgress"
+                />
+                <package-field-text label="Interactive" :value="selectionne.Interactive" />
+                <package-field-text label="Language" :value="selectionne.Language" />
+                <package-field-text label="Log" :value="selectionne.Log" />
+                <package-field-text label="InstallLocation" :value="selectionne.InstallLocation" />
+                <package-field-text
+                  label="Localization"
+                  :value="selectionne.Localization && selectionne.Localization.Language"
+                />
+                <package-field-text label="ManifestVersion" :value="selectionne.ManifestVersion" />
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card>
+              <v-card-title>Installer</v-card-title>
+              <v-card-text>
+                <package-field-text label="Arch" :value="installer.Arch" />
+                <package-field-text label="URL" :value="installer.URL" />
+                <package-field-text label="DownloadUrl" :value="installer.DownloadUrl" />
+                <package-field-text label="Sha" :value="installer.Sha" />
+                <package-field-text label="SignatureSha256" :value="installer.SignatureSha256" />
+                <package-field-text label="Switches" :value="installer.Switches" />
+                <package-field-text label="Scope" :value="installer.Scope" />
+                <package-field-text label="SystemAppId" :value="installer.SystemAppId" />
+                <package-field-text label="Type" :value="installer.Type" />
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row>
       </v-card-text>
@@ -51,15 +93,24 @@
 import { mapState, mapActions } from "vuex";
 import { SelectedPkgSelector } from "@/store/types";
 import { shell } from "electron";
+import PackageFieldText from "@/components/packages/PackageFieldText";
+import PackageFieldLink from "@/components/packages/PackageFieldLink";
 
 export default {
   props: {
     id: { type: String, required: true }
   },
+  components: { PackageFieldText, PackageFieldLink },
   computed: {
     ...mapState({
       selectionne: SelectedPkgSelector
-    })
+    }),
+    installer() {
+      return (
+        this.selectionne &&
+        (this.selectionne.Installer || this.selectionne.Installers)
+      );
+    }
   },
   methods: {
     ...mapActions(["install", "selectionnerPackage"]),
@@ -81,7 +132,7 @@ export default {
     installProgress: false
   }),
   mounted() {
-      this.selectionnerPackage(this.id);
+    this.selectionnerPackage(this.id).catch(() => this.$router.go(-1));
   }
 };
 </script>

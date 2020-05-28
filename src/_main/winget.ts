@@ -1,5 +1,5 @@
 import { exec, spawn } from "child_process";
-import { ResumePackage, Package, PackageType } from './types';
+import { ResumePackage, Package, PackageType, PackageInstaller } from './types';
 import YAML from "yaml";
 
 export const getVersion = () => new Promise((resolve, reject) => {
@@ -60,22 +60,46 @@ export const showPackage = (id: string) => new Promise((resolve, reject) => {
     });
 
     pkg.on("close", code => {
+        const installer: (installer: any) => PackageInstaller = installer => installer && ({
+            Arch: installer.Arch,
+            URL: installer.URL,
+            DownloadUrl: installer['Download Url'] || installer.DownloadUrl,
+            Sha: installer.SHA256,
+            SignatureSha256: installer.SignatureSha256,
+            Switches: installer.Switches,
+            Scope: installer.Scope,
+            SystemAppId: installer.SystemAppId,
+            Type: installer.Type as PackageType
+        } as PackageInstaller);
         const foundPackage: Package = {
             Id: packageIdentifier.Id,
+            Author: packageDescription.Author,
+            Publisher: packageDescription.Publisher,
             Name: packageIdentifier.Name,
             AppMoniker: packageDescription.AppMoniker,
-            Author: packageDescription.Author,
+            Version: packageDescription.Version,
+            Channel: packageDescription.Channel,            
+            License: packageDescription.License,
+            LicenseUrl: packageDescription["License Url"] || packageDescription.LicenseUrl,
+            MinOSVersion: packageDescription.MinOSVersion,
             Description: packageDescription.Description,
             Homepage: packageDescription.Homepage,
-            Version: packageDescription.Version,
-            Publisher: packageDescription.Publisher,
-            License: packageDescription.License,
-            LicenseUrl: packageDescription["License Url"],
-            Installer: packageDescription.Installer && {
-                DownloadUrl: packageDescription.Installer['Download Url'],
-                Sha: packageDescription.Installer.SHA256,
-                Type: packageDescription.Installer.Type as PackageType
-            }
+            Tags: packageDescription.Tags,
+            FileExtensions: packageDescription.FileExtensions,
+            Protocols: packageDescription.Protocols,
+            Commands: packageDescription.Commands,
+            InstallerType: packageDescription.InstallerType,
+            Custom: packageDescription.Custom,
+            Silent: packageDescription.Silent,
+            SilentWithProgress: packageDescription.SilentWithProgress,
+            Interactive: packageDescription.Interactive,
+            Language: packageDescription.Language,
+            Log: packageDescription.Log,
+            InstallLocation: packageDescription.InstallLocation,            
+            Installer: installer(packageDescription.Installer),
+            Installers: installer(packageDescription.Installers),
+            Localization: packageDescription.Localization,
+            ManifestVersion: packageDescription.ManifestVersion
         };
         resolve(foundPackage);
     });

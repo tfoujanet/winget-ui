@@ -7,14 +7,21 @@
       <package-preview v-for="(pkg, i) in listePreview" :key="i" />
     </v-row>
     <v-row v-else>
-      <package-resume
-        v-for="(pkg, i) in packages"
-        :key="i"
-        :name="pkg.Name"
-        :version="pkg.Version"
-        :id="pkg.Id"
-        @click="selectPackage(pkg.Id)"
-      />
+      <v-card outlined>
+        <v-card-title v-text="titre"></v-card-title>
+        <v-card-text>
+          <v-row>
+            <package-resume
+              v-for="(pkg, i) in packages"
+              :key="i"
+              :name="pkg.Name"
+              :version="pkg.Version"
+              :id="pkg.Id"
+              @click="selectPackage(pkg.Id)"
+            />
+          </v-row>
+        </v-card-text>
+      </v-card>
     </v-row>
   </v-container>
 </template>
@@ -32,13 +39,16 @@ export default {
   components: { PackagePreview, PackageResume },
   computed: {
     ...mapGetters({
-      packages: 'filteredPackage'
+      packages: "filteredPackage"
     }),
     ...mapState({
       installed: IsInstalledSelector
     }),
     listePreview() {
       return this.packages.length ? [] : [...Array(NOMBRE_PACKAGE_DEFAUT)];
+    },
+    titre() {
+      return `${this.packages.length} package(s)`;
     }
   },
   methods: {
