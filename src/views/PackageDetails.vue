@@ -4,6 +4,19 @@
       <v-progress-circular indeterminate />
     </v-overlay>
     <v-card outlined v-else>
+      <v-btn
+        absolute
+        dark
+        fab
+        top
+        right
+        :loading="installProgress"
+        color="primary"
+        @click="launchInstall"
+        style="top: 1rem"
+      >
+        <v-icon>get_app</v-icon>
+      </v-btn>
       <v-card-title>
         <v-btn icon color="primary" @click="goToList">
           <v-icon>arrow_back</v-icon>
@@ -86,13 +99,26 @@
         </v-btn>-->
       </v-card-actions>
     </v-card>
+    <v-bottom-sheet v-model="showLogs" hide-overlay persistent scrollable>
+      <v-card max-height="20rem">
+        <v-card-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="showLogs = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <div v-for="(log, i) in logs" :key="i" v-text="log"></div>
+        </v-card-text>
+      </v-card>
+    </v-bottom-sheet>
   </v-container>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
 import { SelectedPkgSelector } from "@/store/types";
-import { shell } from "electron";
+import { shell, ipcRenderer } from "electron";
 import PackageFieldText from "@/components/packages/PackageFieldText";
 import PackageFieldLink from "@/components/packages/PackageFieldLink";
 
@@ -118,7 +144,8 @@ export default {
       shell.openExternal(link);
     },
     launchInstall() {
-      this.installProgress = true;
+      // this.installProgress = true;
+      this.showLogs = true;
       this.install(this.selectionne.Id).finally(
         () => (this.installProgress = false)
       );
@@ -129,10 +156,16 @@ export default {
     }
   },
   data: () => ({
-    installProgress: false
+    installProgress: false,
+    showLogs: false,
+    logs: []
   }),
   mounted() {
     this.selectionnerPackage(this.id).catch(() => this.$router.go(-1));
+    ipcRenderer.on("INSTALL_LOG", (_, data) => {
+      this.logs.push(data);
+      this.showLogs = true;
+    });
   }
 };
 </script>

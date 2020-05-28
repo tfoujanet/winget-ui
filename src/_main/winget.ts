@@ -34,7 +34,7 @@ export const listerPackages = () => new Promise((resolve, reject) => {
 });
 
 export const showPackage = (id: string) => new Promise((resolve, reject) => {
-    const pkg = spawn("winget", ["show", "--id", id], { shell: true });
+    const pkg = spawn("winget", ["show", "--id", id, "--exact"], { shell: true });
 
     let packageIdentifier: any;
     let packageDescription: any = {};
@@ -44,7 +44,7 @@ export const showPackage = (id: string) => new Promise((resolve, reject) => {
     pkg.stdout.on("data", (data: Buffer) => {
         const res = data.toString().trim();
         if (!packageIdentifier) {
-            const idMatch = res.match(/\[[a-zA-z0-9\.]+\]$/);
+            const idMatch = res.match(/\[[a-zA-z0-9\-\.]+\]$/);
             const nameMatch = res.match(/\[[a-zA-z0-9\. ]+\[/);
             packageIdentifier = {
                 Id: idMatch && idMatch.length === 1 && idMatch[0].replace("[96m", "").replace("]", ""),
@@ -105,10 +105,4 @@ export const showPackage = (id: string) => new Promise((resolve, reject) => {
     });
 });
 
-export const installPackage = (id: string) => new Promise((resolve, reject) => {
-    const install = spawn("winget", ["install", "--id", id]);
-    install.stderr.on("data", data => reject(data));
-    install.on("close", code => {
-        resolve();
-    });
-});
+export const installPackage = (id: string) => spawn("winget", ["install", "--id", id, '--exact']);
