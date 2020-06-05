@@ -19,9 +19,9 @@ Winget-UI is a graphical interface with new [Windows Package Manager](https://gi
   - :white_check_mark: packages list
   - :white_check_mark: packages filtering
   - :white_check_mark: packages manifest
-  - :black_square_button: packages installer details
+  - :white_check_mark: packages installer details
+  - :white_check_mark: packages install
   - :black_square_button: packages versions
-  - :black_square_button: packages install
   - :black_square_button: sources
   - :black_square_button: create scripts
   - :black_square_button: launch scripts
