@@ -16,19 +16,12 @@ export const executer = (commande: string, args: string[], powershell: boolean =
     process.on("close", () => resolve(result));
 });
 
-export const stream = (commande: string, args: string[], powershell: boolean = true) => {
-    const readStream = new EventEmitter();
-    const ps = initializeShell();
-    const close = () => {
-        ps.dispose();
-        readStream.emit('end');
-    };
-    ps.addCommand(commande);
-    ps.on('output', data => {
-        readStream.emit('data', data);
+export const anonymousExec = (commande: string, args: string[]) => {
+    const ps = new Shell({
+        executionPolicy: 'Bypass',
+        noProfile: true
     });
-    ps.on('err', data => readStream.emit('error', data));
-    ps.on('end', _ => close());
-    ps.invoke();
-    return readStream;
-}
+    const cmd = `${commande} ${args.join(' ')}`;
+    ps.addCommand(cmd);
+    return ps.invoke();
+};

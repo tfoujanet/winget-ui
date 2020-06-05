@@ -1,7 +1,7 @@
-import { exec, spawn } from "child_process";
+import { exec } from "child_process";
 import { ResumePackage, Package, PackageType, PackageInstaller } from './types';
 import YAML from "yaml";
-import { executer, stream } from "./shell";
+import { executer, anonymousExec } from "./shell";
 
 export const getVersion = () => new Promise((resolve, reject) => {
     exec("winget -v", (error, stdOut) => {
@@ -96,4 +96,4 @@ export const showPackage = (id: string) => executer("winget", ["show", "--id", i
     return pkg;
 });
 
-export const installPackage = (id: string) => stream("winget", ["install", "--id", id, "--exact"]);
+export const installPackage = (id: string) => anonymousExec("winget", ["install", "--id", id, "--exact"]);

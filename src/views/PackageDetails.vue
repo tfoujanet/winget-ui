@@ -14,8 +14,21 @@
         color="primary"
         @click="launchInstall"
         style="top: 1rem"
+        v-if="installSuccess === null"
       >
         <v-icon>get_app</v-icon>
+      </v-btn>
+      <v-btn
+        absolute
+        dark
+        fab
+        top
+        right
+        :color="installSuccess ? 'success' : 'error'"
+        style="top: 1rem"
+        v-else
+      >
+        <v-icon v-text="installSuccess ? 'done' : 'error'"></v-icon>
       </v-btn>
       <v-card-title>
         <v-btn icon color="primary" @click="goToList">
@@ -99,26 +112,13 @@
         </v-btn>-->
       </v-card-actions>
     </v-card>
-    <v-bottom-sheet v-model="showLogs" hide-overlay persistent scrollable>
-      <v-card max-height="20rem">
-        <v-card-title>
-          <v-spacer></v-spacer>
-          <v-btn icon @click="showLogs = false">
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-card-text>
-          <div v-for="(log, i) in logs" :key="i" v-text="log"></div>
-        </v-card-text>
-      </v-card>
-    </v-bottom-sheet>
   </v-container>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
 import { SelectedPkgSelector } from "@/store/types";
-import { shell, ipcRenderer } from "electron";
+import { shell } from "electron";
 import PackageFieldText from "@/components/packages/PackageFieldText";
 import PackageFieldLink from "@/components/packages/PackageFieldLink";
 
@@ -144,11 +144,15 @@ export default {
       shell.openExternal(link);
     },
     launchInstall() {
-      // this.installProgress = true;
-      this.showLogs = true;
-      this.install(this.selectionne.Id).finally(
-        () => (this.installProgress = false)
-      );
+      this.installProgress = true;
+      this.install(this.selectionne.Id)
+      .then(() => {
+        this.installSuccess = true;
+      })
+      .catch(err => {
+        this.installSuccess = false;
+      })
+      .finally(() => this.installProgress = false);
     },
     goToList() {
       this.$router.go(-1);
@@ -157,15 +161,10 @@ export default {
   },
   data: () => ({
     installProgress: false,
-    showLogs: false,
-    logs: []
+    installSuccess: null
   }),
   mounted() {
     this.selectionnerPackage(this.id).catch(() => this.$router.go(-1));
-    ipcRenderer.on("INSTALL_LOG", (_, data) => {
-      this.logs.push(data);
-      this.showLogs = true;
-    });
   }
 };
 </script>
