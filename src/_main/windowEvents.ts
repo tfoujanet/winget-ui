@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, ipcMain, app } from 'electron';
 
 export default function launch(mainWindow: BrowserWindow | null) {
     ipcMain.on("minimize", () => {
@@ -13,5 +13,9 @@ export default function launch(mainWindow: BrowserWindow | null) {
             mainWindow.maximize();
         }
     });
-    ipcMain.on("close", () => mainWindow && mainWindow.close());
+    ipcMain.on("close", () => {
+        if (mainWindow) {
+            mainWindow.close();
+        }
+    });
 };
