@@ -1,6 +1,6 @@
 import { ActionTree } from "vuex";
-import { State, WINGET_NON_INSTALLED, VERSION_CHARGEE, PACKAGES_LISTES, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED } from './types';
-import { getVersion, listerPackages, showPackage, installPackage } from '../services/winget';
+import { State, WINGET_NON_INSTALLED, VERSION_CHARGEE, PACKAGES_LISTES, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED, VERSIONS_LISTEES } from './types';
+import { getVersion, listerPackages, showPackage, installPackage, listerVersions } from '../services/winget';
 import { getAppVersion } from '@/services/context';
 
 const actions: ActionTree<State, State> = {
@@ -30,13 +30,23 @@ const actions: ActionTree<State, State> = {
     listerPackages({ commit }) {
         return listerPackages().then(liste => commit(PACKAGES_LISTES, liste));
     },
-    selectionnerPackage({ commit }, id) {
+    selectionnerPackage({ commit, dispatch }, { id, version }) {
         if (!id) {
             commit(PACKAGE_UNSELECTED);
             return Promise.resolve();
         } else {
-            return showPackage(id).then(pkg => commit(PACKAGE_LOADED, pkg));
+            return showPackage(id, version).then(pkg => {
+                dispatch("listerVersions", id);
+                commit(PACKAGE_LOADED, pkg);
+            });
         }
+    },
+    listerVersions({ commit, state }, id) {
+        if (state.versions.id !== id) {
+            return listerVersions(id).then(versions => {
+                commit(VERSIONS_LISTEES, {id, versions});
+            });
+        }        
     },
     install(_, id) {
         return installPackage(id);

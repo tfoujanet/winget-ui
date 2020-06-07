@@ -2,5 +2,6 @@ export const GET_VERSION = "GET_VERSION";
 export const LISTER_PACKAGES = "LISTER_PACKAGES";
 export const SHOW_PACKAGE = "SHOW_PACKAGE";
 export const INSTALL_PACKAGE = "INSTALL_PACKAGE";
+export const LIST_VERSIONS = "LIST_VERSIONS";
 
 export const APP_VERSION = "APP_VERSION";

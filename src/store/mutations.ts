@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { State, VERSION_CHARGEE, PACKAGES_LISTES, WINGET_NON_INSTALLED, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED } from './types';
+import { State, VERSION_CHARGEE, PACKAGES_LISTES, WINGET_NON_INSTALLED, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED, VERSIONS_LISTEES } from './types';
 import { Package, ResumePackage } from '@/_main/types';
 
 const mutations: MutationTree<State> = {
@@ -24,6 +24,9 @@ const mutations: MutationTree<State> = {
     },
     [PACKAGES_FILTERED](state, filter) {
         state.filter = filter;
+    },
+    [VERSIONS_LISTEES](state, { id, versions }) {
+        state.versions = { id, liste: versions };
     }
 };
 

@@ -1,12 +1,13 @@
 <template>
   <v-app style="height: 100vh">
-    <v-app-bar app color="primary" dark dense @dblclick="maximize">
-      <v-app-bar-nav-icon v-if="$store.state.installed" @click="drawer = !drawer" />
+    <v-app-bar class="app-bar" app color="primary" dark dense @dblclick="maximize">
+      <v-app-bar-nav-icon v-if="$store.state.installed" @click="drawer = !drawer" class="no-drag" />
 
       <v-spacer></v-spacer>
 
       <v-combobox
         v-if="$store.state.installed && $route.path === '/'"
+        class="no-drag"
         placeholder="Rechercher"
         hide-details
         append-icon
@@ -19,13 +20,13 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn text icon @click="minimize">
+      <v-btn text icon @click="minimize" class="no-drag">
         <v-icon>minimize</v-icon>
       </v-btn>
-      <v-btn text icon @click="maximize">
+      <v-btn text icon @click="maximize" class="no-drag">
         <v-icon>fullscreen</v-icon>
       </v-btn>
-      <v-btn text icon @click="close">
+      <v-btn text icon @click="close" class="no-drag">
         <v-icon>close</v-icon>
       </v-btn>
     </v-app-bar>
@@ -112,3 +113,13 @@ export default Vue.extend({
   }
 });
 </script>
+
+<style scoped>
+.app-bar {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+</style>

@@ -5,6 +5,7 @@ const state: State = {
     version: "",
     packages: [],
     selectionne: null,
+    versions: { id: "", liste: [] },
     appVersion: "",
     filter: ""
 }

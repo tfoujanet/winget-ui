@@ -18,7 +18,7 @@
                 :name="pkg.Name"
                 :version="pkg.Version"
                 :id="pkg.Id"
-                @click="selectPackage(pkg.Id)"
+                @click="selectPackage(pkg.Id, pkg.Version)"
               />
             </v-row>
           </v-card-text>

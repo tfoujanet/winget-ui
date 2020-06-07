@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
     component: NoWinget
   },
   {
-    path: "/package/:id",
+    path: "/package/:id/:version?",
     name: RouteNames.Package,
     props: true,
     component: PackageDetails

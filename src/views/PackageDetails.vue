@@ -88,20 +88,42 @@
             </v-card>
           </v-col>
           <v-col>
-            <v-card>
-              <v-card-title>Installer</v-card-title>
-              <v-card-text>
-                <package-field-text label="Arch" :value="installer.Arch" />
-                <package-field-text label="URL" :value="installer.URL" />
-                <package-field-text label="DownloadUrl" :value="installer.DownloadUrl" />
-                <package-field-text label="Sha" :value="installer.Sha" />
-                <package-field-text label="SignatureSha256" :value="installer.SignatureSha256" />
-                <package-field-text label="Switches" :value="installer.Switches" />
-                <package-field-text label="Scope" :value="installer.Scope" />
-                <package-field-text label="SystemAppId" :value="installer.SystemAppId" />
-                <package-field-text label="Type" :value="installer.Type" />
-              </v-card-text>
-            </v-card>
+            <v-row>
+              <v-col cols="12">
+                <v-card>
+                  <v-card-title>Installer</v-card-title>
+                  <v-card-text>
+                    <package-field-text label="Arch" :value="installer.Arch" />
+                    <package-field-text label="URL" :value="installer.URL" />
+                    <package-field-text label="DownloadUrl" :value="installer.DownloadUrl" />
+                    <package-field-text label="Sha" :value="installer.Sha" />
+                    <package-field-text label="SignatureSha256" :value="installer.SignatureSha256" />
+                    <package-field-text label="Switches" :value="installer.Switches" />
+                    <package-field-text label="Scope" :value="installer.Scope" />
+                    <package-field-text label="SystemAppId" :value="installer.SystemAppId" />
+                    <package-field-text label="Type" :value="installer.Type" />
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-card>
+                  <v-card-title>Versions</v-card-title>
+                  <v-card-text>
+                    <v-list>
+                      <v-list-item-group :value="displayedVersion">
+                        <v-list-item v-for="(version, i) in versions.liste" :key="i" @click="$router.push(`/package/${id}/${version}`)">
+                          <v-list-item-content>
+                            <v-list-item-title v-text="version"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card-text>
@@ -117,25 +139,36 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { SelectedPkgSelector } from "@/store/types";
+import { SelectedPkgSelector, VersionsSelector } from "@/store/types";
 import { shell } from "electron";
 import PackageFieldText from "@/components/packages/PackageFieldText";
 import PackageFieldLink from "@/components/packages/PackageFieldLink";
 
 export default {
   props: {
-    id: { type: String, required: true }
+    id: { type: String, required: true },
+    version: { type: String, required: false }
   },
   components: { PackageFieldText, PackageFieldLink },
   computed: {
     ...mapState({
-      selectionne: SelectedPkgSelector
+      selectionne: SelectedPkgSelector,
+      versions: VersionsSelector
     }),
     installer() {
       return (
         this.selectionne &&
         (this.selectionne.Installer || this.selectionne.Installers)
       );
+    },
+    versionsLoading() {
+      return this.versions.id !== this.id;
+    },
+    displayedVersion() {
+      const pkgVersion = this.selectionne.Version;
+      return this.versions.id === this.id
+        ? this.versions.liste.indexOf(pkgVersion)
+        : null;
     }
   },
   methods: {
@@ -146,16 +179,16 @@ export default {
     launchInstall() {
       this.installProgress = true;
       this.install(this.selectionne.Id)
-      .then(() => {
-        this.installSuccess = true;
-      })
-      .catch(err => {
-        this.installSuccess = false;
-      })
-      .finally(() => this.installProgress = false);
+        .then(() => {
+          this.installSuccess = true;
+        })
+        .catch(() => {
+          this.installSuccess = false;
+        })
+        .finally(() => (this.installProgress = false));
     },
     goToList() {
-      this.$router.go(-1);
+      this.$router.push('/');
       this.selectionnerPackage();
     }
   },
@@ -164,7 +197,14 @@ export default {
     installSuccess: null
   }),
   mounted() {
-    this.selectionnerPackage(this.id).catch(() => this.$router.go(-1));
+    this.selectionnerPackage({ id: this.id, version: this.version }).catch(() =>
+      this.$router.go(-1)
+    );
+  },
+  beforeRouteUpdate(to, from, next) {
+    debugger;
+    this.selectionnerPackage({ id: to.params.id, version: to.params.version });
+    next();
   }
 };
 </script>

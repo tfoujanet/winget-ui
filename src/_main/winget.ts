@@ -85,7 +85,7 @@ const buildPackage = (packageId: any, packageDescription: any) => {
     } as Package;
 }
 
-export const showPackage = (id: string) => executer("winget", ["show", "--id", id, "--exact"]).then(data => {
+export const showPackage = (id: string, version?: string) => executer("winget", ["show", "--id", id, "--exact", ...(version ? ["--version", version] : [])]).then(data => {
     const res = data.toString().trim();
     const rawIdentifier = res.substring(0, res.indexOf('\r\n')).trim();
     const rawDescription = res.substring(res.indexOf('\r\n')).trim();
@@ -94,6 +94,10 @@ export const showPackage = (id: string) => executer("winget", ["show", "--id", i
         formatPackageDescription(rawDescription)
     );
     return pkg;
+});
+
+export const listVersions = (id: string) => executer("winget", ["show", "--id", id, "--exact", "--versions"]).then(data => {
+    return data.substring(data.lastIndexOf('---')).replace('---', '').trim().split('\r\n');
 });
 
 export const installPackage = (id: string) => anonymousExec("winget", ["install", "--id", id, "--exact"]);
