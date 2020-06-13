@@ -113,7 +113,11 @@
                   <v-card-text>
                     <v-list>
                       <v-list-item-group :value="displayedVersion">
-                        <v-list-item v-for="(version, i) in versions.liste" :key="i" @click="changeVersion(version)">
+                        <v-list-item
+                          v-for="(version, i) in versions.liste"
+                          :key="i"
+                          @click="changeVersion(version)"
+                        >
                           <v-list-item-content>
                             <v-list-item-title v-text="version"></v-list-item-title>
                           </v-list-item-content>
@@ -134,6 +138,14 @@
         </v-btn>-->
       </v-card-actions>
     </v-card>
+    <v-overlay v-model="installProgress">
+      <div class="d-flex flex-column justify-center align-center">
+        <div>
+          <v-progress-circular indeterminate />
+        </div>
+        <div class="mt-3" style="width: 100%">Installation en cours</div>
+      </div>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -188,7 +200,7 @@ export default {
         .finally(() => (this.installProgress = false));
     },
     goToList() {
-      this.$router.push('/');
+      this.$router.push("/");
       this.selectionnerPackage();
     },
     changeVersion(version) {

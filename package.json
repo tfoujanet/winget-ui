@@ -22,7 +22,6 @@
   "dependencies": {
     "core-js": "^3.6.4",
     "electron-store": "^5.2.0",
-    "node-powershell": "^4.0.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
     "vuetify": "^2.2.11",
