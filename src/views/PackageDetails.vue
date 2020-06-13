@@ -113,7 +113,7 @@
                   <v-card-text>
                     <v-list>
                       <v-list-item-group :value="displayedVersion">
-                        <v-list-item v-for="(version, i) in versions.liste" :key="i" @click="$router.push(`/package/${id}/${version}`)">
+                        <v-list-item v-for="(version, i) in versions.liste" :key="i" @click="changeVersion(version)">
                           <v-list-item-content>
                             <v-list-item-title v-text="version"></v-list-item-title>
                           </v-list-item-content>
@@ -190,6 +190,10 @@ export default {
     goToList() {
       this.$router.push('/');
       this.selectionnerPackage();
+    },
+    changeVersion(version) {
+      if (version === this.version) return;
+      this.$router.push(`/package/${this.id}/${version}`);
     }
   },
   data: () => ({
@@ -202,7 +206,6 @@ export default {
     );
   },
   beforeRouteUpdate(to, from, next) {
-    debugger;
     this.selectionnerPackage({ id: to.params.id, version: to.params.version });
     next();
   }

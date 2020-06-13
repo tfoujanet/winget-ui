@@ -48,7 +48,6 @@ export default {
       this.$store
         .dispatch("checkWingetVersion")
         .then(version => {
-            debugger;
             if (version) {
                 this.$router.replace("/");
             }

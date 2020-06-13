@@ -54,8 +54,8 @@ export default {
     }
   },
   methods: {
-    selectPackage(id) {
-      this.$router.push(`/package/${id}`);
+    selectPackage(id, version) {
+      this.$router.push(`/package/${id}/${version}`);
     }
   }
 };

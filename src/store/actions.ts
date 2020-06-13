@@ -30,7 +30,7 @@ const actions: ActionTree<State, State> = {
     listerPackages({ commit }) {
         return listerPackages().then(liste => commit(PACKAGES_LISTES, liste));
     },
-    selectionnerPackage({ commit, dispatch }, { id, version }) {
+    selectionnerPackage({ commit, dispatch }, { id, version } = {}) {
         if (!id) {
             commit(PACKAGE_UNSELECTED);
             return Promise.resolve();
