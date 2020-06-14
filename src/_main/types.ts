@@ -49,3 +49,8 @@ export interface Package {
     Localization: { Language: string };
     ManifestVersion: string;
 }
+
+export interface Source {
+    name: string;
+    url: string;
+}

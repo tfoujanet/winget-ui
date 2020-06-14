@@ -1,7 +1,8 @@
 import { ActionTree } from "vuex";
-import { State, WINGET_NON_INSTALLED, VERSION_CHARGEE, PACKAGES_LISTES, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED, VERSIONS_LISTEES, PACKAGES_LIST_RESET } from './types';
-import { getVersion, listerPackages, showPackage, installPackage, listerVersions } from '../services/winget';
+import { State, WINGET_NON_INSTALLED, VERSION_CHARGEE, PACKAGES_LISTES, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED, VERSIONS_LISTEES, PACKAGES_LIST_RESET, SOURCES_LISTED, SOURCE_ADDED, SOURCE_REMOVED } from './types';
+import { getVersion, listerPackages, showPackage, installPackage, listerVersions, listSources, addSource, refreshSources, removeSource } from '../services/winget';
 import { getAppVersion } from '@/services/context';
+import { Source } from '@/_main/types';
 
 const actions: ActionTree<State, State> = {
     initialiser({ dispatch }) {
@@ -57,6 +58,18 @@ const actions: ActionTree<State, State> = {
     },
     filterPackages({ commit }, filter) {
         commit(PACKAGES_FILTERED, filter);
+    },
+    listSources({ commit }) {
+        return listSources().then(sources => commit(SOURCES_LISTED, sources));
+    },
+    addSource({ commit }, { name, url }: Source) {
+        return addSource(name, url).then(() => commit(SOURCE_ADDED, { name, url }));
+    },
+    refreshSources({ dispatch }) {
+        return refreshSources().then(() => dispatch('listerPackages'));
+    },
+    removeSource({ commit }, name: string) {
+        return removeSource(name).then(() => commit(SOURCE_REMOVED, name));
     }
 };
 

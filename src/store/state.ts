@@ -7,7 +7,8 @@ const state: State = {
     selectionne: null,
     versions: { id: "", liste: [] },
     appVersion: "",
-    filter: ""
+    filter: "",
+    sources: []
 }
 
 export default state;

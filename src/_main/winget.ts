@@ -1,5 +1,5 @@
 import { exec } from "child_process";
-import { ResumePackage, Package, PackageType, PackageInstaller } from './types';
+import { ResumePackage, Package, PackageType, PackageInstaller, Source } from './types';
 import YAML from "yaml";
 import { executer, anonymousExec } from "./shell";
 
@@ -17,7 +17,7 @@ export const getVersion = () => new Promise((resolve, reject) => {
 const buildPackageResume = (cliLine: string[]) => {
     const version = cliLine.splice(cliLine.length - 1, 1);
     const id = cliLine.splice(cliLine.length - 1, 1);
-    const name  = cliLine.join(' ');
+    const name = cliLine.join(' ');
     return {
         Id: id[0],
         Name: name,
@@ -108,3 +108,26 @@ export const listVersions = (id: string) => executer("winget", ["show", "--id", 
 });
 
 export const installPackage = (id: string) => anonymousExec("winget", ["install", "--id", id, "--exact"]);
+
+const buildSource = (rawSource: string[]) => {
+    const url = rawSource.splice(rawSource.length - 1, 1)[0];
+    const name = rawSource.join(' ');
+    return {
+        name,
+        url
+    } as Source;
+}
+
+export const listSources = () => executer("winget", ["source", "list"]).then(data => {
+    const rawSources = data.substring(data.lastIndexOf('---')).replace('---', '').trim().split('\r\n');
+    return rawSources.map(src => buildSource(src.split(' ')));
+});
+
+export const addSource = (name: string, url: string) => executer("winget", ["source", "add", "-n", name, "-a", url]).then(() => true);
+
+export const refreshSource = (name?: string) => {
+    const args = ["source", "update", ...(name ? ['-n', name] : [])];
+    return executer("winget", args).then(() => true);
+};
+
+export const removeSource = (name: string) => executer("winget", ["source", "remove", "-n", name]).then(() => true);

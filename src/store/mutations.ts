@@ -1,6 +1,6 @@
 import { MutationTree } from "vuex";
-import { State, VERSION_CHARGEE, PACKAGES_LISTES, WINGET_NON_INSTALLED, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED, VERSIONS_LISTEES, PACKAGES_LIST_RESET } from './types';
-import { Package, ResumePackage } from '@/_main/types';
+import { State, VERSION_CHARGEE, PACKAGES_LISTES, WINGET_NON_INSTALLED, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED, VERSIONS_LISTEES, PACKAGES_LIST_RESET, SOURCE_ADDED, SOURCES_LISTED, SOURCE_REMOVED } from './types';
+import { Package, ResumePackage, Source } from '@/_main/types';
 
 const mutations: MutationTree<State> = {
     [VERSION_CHARGEE](state, version: string) {
@@ -30,6 +30,18 @@ const mutations: MutationTree<State> = {
     },
     [VERSIONS_LISTEES](state, { id, versions }) {
         state.versions = { id, liste: versions };
+    },
+    [SOURCES_LISTED](state, sources: Source[]) {
+        state.sources = sources;
+    },
+    [SOURCE_ADDED](state, source: Source) {
+        state.sources = [
+            ...state.sources,
+            source
+        ];
+    },
+    [SOURCE_REMOVED](state, name: string) {
+        state.sources = state.sources.filter(_ => _.name !== name);
     }
 };
 

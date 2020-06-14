@@ -4,4 +4,9 @@ export const SHOW_PACKAGE = "SHOW_PACKAGE";
 export const INSTALL_PACKAGE = "INSTALL_PACKAGE";
 export const LIST_VERSIONS = "LIST_VERSIONS";
 
+export const SOURCES_LIST = "SOURCES_LIST";
+export const SOURCES_REFRESH = "SOURCES_REFRESH";
+export const SOURCES_ADD = "SOURCES_ADD";
+export const SOURCES_REMOVE = "SOURCES_REMOVE";
+
 export const APP_VERSION = "APP_VERSION";

@@ -50,6 +50,15 @@
             <v-list-item-title>About</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item @click="$router.push('/sources')">
+          <v-list-item-icon>
+            <v-icon>cloud_download</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Sources</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 

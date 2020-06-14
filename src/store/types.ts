@@ -1,4 +1,4 @@
-import { ResumePackage, Package } from '@/_main/types';
+import { ResumePackage, Package, Source } from '@/_main/types';
 
 export const VERSION_CHARGEE = "VERSION_CHARGEE";
 export const PACKAGES_LISTES = "PACKAGES_LISTES";
@@ -11,6 +11,10 @@ export const VERSIONS_LISTEES = "VERSIONS_LISTEES";
 
 export const APP_VERSION_LOADED = "APP_VERSION_LOADED";
 
+export const SOURCES_LISTED = "SOURCES_LISTED";
+export const SOURCE_ADDED = "SOURCE_ADDED";
+export const SOURCE_REMOVED = "SOURCE_REMOVED";
+
 export interface State {
     installed: boolean | null;
     version: string;
@@ -19,6 +23,7 @@ export interface State {
     versions: { id: string; liste: string[] };
     appVersion: string;
     filter: string;
+    sources: Source[];
 }
 
 export const VersionSelector = (state: State) => state.version;
@@ -27,3 +32,4 @@ export const IsInstalledSelector = (state: State) => state.installed;
 export const SelectedPkgSelector = (state: State) => state.selectionne;
 export const VersionsSelector = (state: State) => state.versions;
 export const AppVersionSelector = (state: State) => state.appVersion;
+export const SourcesSelector = (state: State) => state.sources;
