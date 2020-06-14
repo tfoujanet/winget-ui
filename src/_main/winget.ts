@@ -33,7 +33,7 @@ export const listerPackages = () => executer("winget", ["search"], false).then(d
 
 const formatPackageIdentifier = (rawIdentifier: string) => {
     const idMatch = rawIdentifier.match(/\[[a-zA-z0-9\-\.]+\]$/);
-    const nameMatch = rawIdentifier.match(/\[[a-zA-z0-9\. ]+\[/);
+    const nameMatch = rawIdentifier.match(/\[[a-zA-z0-9\.\(\) ]+\[/);
     return {
         Id: idMatch && idMatch.length === 1 && idMatch[0].replace("[96m", "").replace("]", ""),
         Name: nameMatch && nameMatch.length === 1 && nameMatch[0].replace(/\[/g, '').replace("96m", "").trim()
