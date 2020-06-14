@@ -14,14 +14,21 @@ export const getVersion = () => new Promise((resolve, reject) => {
     });
 });
 
-export const listerPackages = () => executer("winget", ["search"]).then(data => {
+const buildPackageResume = (cliLine: string[]) => {
+    const version = cliLine.splice(cliLine.length - 1, 1);
+    const id = cliLine.splice(cliLine.length - 1, 1);
+    const name  = cliLine.join(' ');
+    return {
+        Id: id[0],
+        Name: name,
+        Version: version[0]
+    } as ResumePackage;
+}
+
+export const listerPackages = () => executer("winget", ["search"], false).then(data => {
     const rawPackages = data.toString().substring(data.toString().lastIndexOf('---')).replace('---', '').trim().split('\r\n');
-    const listePackages = rawPackages.map(_ => _.split(' ').filter(_ => !!_)).filter(_ => _ && _.length === 3);
-    return listePackages.map(([Name, Id, Version]) => ({
-        Id: Id,
-        Name: Name,
-        Version: Version
-    } as ResumePackage));
+    const listePackages = rawPackages.map(_ => _.split(' ').filter(_ => !!_));
+    return listePackages.map(buildPackageResume);
 });
 
 const formatPackageIdentifier = (rawIdentifier: string) => {

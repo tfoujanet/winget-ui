@@ -2,6 +2,7 @@ import { ResumePackage, Package } from '@/_main/types';
 
 export const VERSION_CHARGEE = "VERSION_CHARGEE";
 export const PACKAGES_LISTES = "PACKAGES_LISTES";
+export const PACKAGES_LIST_RESET = "PACKAGES_LIST_RESET";
 export const WINGET_NON_INSTALLED = "WINGET_NON_INSTALLED";
 export const PACKAGE_LOADED = "PACKAGE_LOADED";
 export const PACKAGE_UNSELECTED = "PACKAGE_UNSELECTED";

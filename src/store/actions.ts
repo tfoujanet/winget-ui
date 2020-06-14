@@ -1,5 +1,5 @@
 import { ActionTree } from "vuex";
-import { State, WINGET_NON_INSTALLED, VERSION_CHARGEE, PACKAGES_LISTES, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED, VERSIONS_LISTEES } from './types';
+import { State, WINGET_NON_INSTALLED, VERSION_CHARGEE, PACKAGES_LISTES, PACKAGE_LOADED, PACKAGE_UNSELECTED, APP_VERSION_LOADED, PACKAGES_FILTERED, VERSIONS_LISTEES, PACKAGES_LIST_RESET } from './types';
 import { getVersion, listerPackages, showPackage, installPackage, listerVersions } from '../services/winget';
 import { getAppVersion } from '@/services/context';
 
@@ -28,6 +28,7 @@ const actions: ActionTree<State, State> = {
             });
     },
     listerPackages({ commit }) {
+        commit(PACKAGES_LIST_RESET);
         return listerPackages().then(liste => commit(PACKAGES_LISTES, liste));
     },
     selectionnerPackage({ commit, dispatch }, { id, version } = {}) {

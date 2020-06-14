@@ -9,7 +9,13 @@
     <v-row v-else>
       <v-col cols="12">
         <v-card outlined>
-          <v-card-title v-text="titre"></v-card-title>
+          <v-card-title>
+            {{titre}}
+            <v-spacer />
+            <v-btn icon color="primary" @click="listerPackages">
+              <v-icon>refresh</v-icon>
+            </v-btn> 
+          </v-card-title>
           <v-card-text>
             <v-row>
               <package-resume
@@ -29,7 +35,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import PackagePreview from "@/components/packages/Preview";
 import PackageResume from "@/components/packages/Resume";
 import { IsInstalledSelector } from "../store/types";
@@ -54,6 +60,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['listerPackages']),
     selectPackage(id, version) {
       this.$router.push(`/package/${id}/${version}`);
     }
