@@ -5,6 +5,7 @@ import NoWinget from "../views/NoWinget.vue";
 import PackageDetails from "../views/PackageDetails.vue";
 import Sources from "../views/Sources.vue";
 import AddSource from "../views/AddSource.vue";
+import Settings from "../views/Settings.vue";
 
 Vue.use(VueRouter);
 
@@ -14,7 +15,8 @@ export const RouteNames = {
   NoWinget: 'NoWinget',
   About: 'About',
   Sources: 'Sources',
-  AddSource: 'AddSource'
+  AddSource: 'AddSource',
+  Settings: 'Settings'
 };
 
 const routes: Array<RouteConfig> = [
@@ -43,6 +45,11 @@ const routes: Array<RouteConfig> = [
     path: "/sources/add",
     name: RouteNames.AddSource,
     component: AddSource
+  },
+  {
+    path: '/settings',
+    name: RouteNames.Settings,
+    component: Settings
   },
   {
     path: '/about',

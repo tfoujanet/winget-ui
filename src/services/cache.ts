@@ -15,3 +15,7 @@ export const getOrSet = (cle: string, provider: () => Promise<any>) => {
 export const setItem = (cle: string, data: any) => {
     store.set(cle, data);
 };
+
+export const clear = () => {
+    store.clear();
+};

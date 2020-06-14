@@ -59,6 +59,15 @@
             <v-list-item-title>Sources</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+         <v-list-item @click="$router.push('/settings')">
+          <v-list-item-icon>
+            <v-icon>settings</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Settings</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
